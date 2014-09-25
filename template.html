@@ -1,0 +1,47 @@
+<!doctype html>
+<html>
+<head>
+  <style>
+canvas {
+  border: 1px solid black;
+}
+  </style>
+</head>
+<body>
+  <canvas width="500" height="500"><span>Browser does not support the canvas.</span></canvas>
+  <script>
+var __name__ = __name__ || {};
+void function(exports) {
+
+  /**
+   * 启动渲染
+   * @param{CanvasRenderingContext2D} context 画布环境
+   * @param{Number} progress 进度，范围：0 ~ 1
+   * @param{JSON} options 选项
+   */
+  function render(context, progress, options) {
+    if (!context) {
+      return;
+    }
+    context.save();
+    /* TODO */
+    context.restore();
+  }
+
+  exports.render = render;
+
+}(__name__);
+
+void function() {
+  var canvas = document.getElementsByTagName('canvas')[0];
+  var context = canvas.getContext('2d');
+  var lifetime = 10000;
+  var starttime = new Date;
+  setInterval(function() {
+    tick = (new Date - starttime) % lifetime;
+    __name__.render(context, tick / lifetime);
+  }, 30);
+}();
+  </script>
+</body>
+</html>

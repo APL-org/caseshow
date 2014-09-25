@@ -1,0 +1,11 @@
+{
+	"name": "caseshow",
+	"description": "动画示例",
+	"version": "0.0.0",
+	"homepage": "http://weib.com/zswang",
+	"license": "MIT",
+	"private": true,
+	"dependencies": {
+		"jmaths": "*"
+	}
+}

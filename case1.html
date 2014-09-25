@@ -1,0 +1,128 @@
+<!doctype html>
+<html>
+<head>
+  <style>
+canvas {
+  border: 1px solid black;
+}
+  </style>
+  <script src="app/components/jmaths/dist/jmaths.min.js"></script>
+</head>
+<body>
+  <canvas width="500" height="500"><span>Browser does not support the canvas.</span></canvas>
+  <script>
+var __name__ = __name__ || {};
+void function(exports) {
+
+  /**
+   * 启动渲染
+   * @param{CanvasRenderingContext2D} context 画布环境
+   * @param{Number} progress 进度，范围：0 ~ 1
+   * @param{JSON} options 选项
+   */
+  function render(context, progress, options) {
+    if (!context) {
+      return;
+    }
+    context.save();
+    var len = options.count;
+    // var offset = (1 / len * 2) / (2 * Math.PI);
+
+    var c = options.induction / len;
+
+    for (var i = 0; i < len; i++) {
+      var x = options.center[0] + options.radius * Math.cos(progress * Math.PI * 2);
+      var y = options.center[1] + options.radius * Math.sin(progress * Math.PI * 2);
+
+      var angle1 = i / len * Math.PI * 2;
+
+      var x1 = options.center[0] + options.radius * Math.cos(angle1);
+      var y1 = options.center[1] + options.radius * Math.sin(angle1);
+
+      var a = i / len;
+      if (progress > 0.5 && a < 0.5) {
+        a += 1;
+      }
+
+      var ratio = -1;
+      var angle2 = (i + 1.5) / len * Math.PI * 2;
+      var x2 = options.center[0] + options.radius * Math.cos(angle2);
+      var y2 = options.center[1] + options.radius * Math.sin(angle2);
+
+      if (a < progress || a >= progress + c) {
+        //context.fillStyle = 'black';
+        context.beginPath();
+        context.arc(
+          x1, y1,
+          options.size, 0, Math.PI * 2, false
+        );
+        context.arc(
+          x2, y2,
+          options.size, 0, Math.PI * 2, false
+        );
+        context.fill();
+        continue;
+      }
+
+      ratio = -(a - progress) / c;
+
+      var center = jmaths.bezier([[x1, y1], [x2, y2]], 0.5);
+
+      var r1 = jmaths.rotatePoint([x1, y1], center, ratio * Math.PI);
+      var r2 = jmaths.rotatePoint([x2, y2], center, ratio * Math.PI);
+
+      // context.beginPath();
+      // context.arc(
+      //   center[0], center[1],
+      //   jmaths.pointToPoint(center, [x1, y1]), 0, Math.PI * 2, false
+      // );
+      // context.stroke();
+      // context.beginPath();
+      // context.moveTo(x1, y1);
+      // context.lineTo(x2, y2);
+      // context.stroke();
+
+      context.beginPath();
+      context.arc(
+        r1[0], r1[1],
+        options.size, 0, Math.PI * 2, false
+      );
+      context.fill();
+
+      context.beginPath();
+      context.arc(
+        r2[0], r2[1],
+        options.size, 0, Math.PI * 2, false
+      );
+      context.fill();
+    }
+
+    context.restore();
+  }
+
+  exports.render = render;
+
+}(__name__);
+
+void function() {
+  var canvas = document.getElementsByTagName('canvas')[0];
+  var context = canvas.getContext('2d');
+  var lifetime = 2000;
+  var starttime = new Date;
+  //setTimeout(function() {
+  setInterval(function() {
+    context.clearRect(0, 0, canvas.width, canvas.height);
+
+    tick = (new Date - starttime) % lifetime;
+    __name__.render(context, tick / lifetime, {
+      center: [canvas.width / 2, canvas.height / 2], // 中心位置
+      size: 7, // 点的尺寸
+      radius: 100, // 大圆半径
+      count: 20, // 点数
+      induction: 4 // 感应区
+    });
+  }, 1 / 60 * 1000);
+}();
+  </script>
+</body>
+</html>
