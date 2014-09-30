@@ -6,7 +6,7 @@ canvas {
   border: 1px solid black;
 }
   </style>
-  <script src="app/components/jmaths/dist/jmaths.min.js"></script>
+  <script src="bower_components/jmaths/dist/jmaths.min.js"></script>
 </head>
 <body>
   <canvas width="500" height="500"><span>Browser does not support the canvas.</span></canvas>
@@ -71,16 +71,16 @@ void function(exports) {
       var r1 = jmaths.rotatePoint([x1, y1], center, ratio * Math.PI);
       var r2 = jmaths.rotatePoint([x2, y2], center, ratio * Math.PI);
 
-      // context.beginPath();
-      // context.arc(
-      //   center[0], center[1],
-      //   jmaths.pointToPoint(center, [x1, y1]), 0, Math.PI * 2, false
-      // );
-      // context.stroke();
-      // context.beginPath();
-      // context.moveTo(x1, y1);
-      // context.lineTo(x2, y2);
-      // context.stroke();
+      context.beginPath();
+      context.arc(
+        center[0], center[1],
+        jmaths.pointToPoint(center, [x1, y1]), 0, Math.PI * 2, false
+      );
+      context.stroke();
+      context.beginPath();
+      context.moveTo(x1, y1);
+      context.lineTo(x2, y2);
+      context.stroke();
 
       context.beginPath();
       context.arc(
@@ -107,7 +107,7 @@ void function(exports) {
 void function() {
   var canvas = document.getElementsByTagName('canvas')[0];
   var context = canvas.getContext('2d');
-  var lifetime = 2000;
+  var lifetime = 10000;
   var starttime = new Date;
   //setTimeout(function() {
   setInterval(function() {
