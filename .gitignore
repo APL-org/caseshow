@@ -29,10 +29,4 @@ build/Release
 node_modules
 
 # Bower
-coverage
-components
-<<<<<<< HEAD
-bower_components
-=======
-bower_components
->>>>>>> FETCH_HEAD
+lib

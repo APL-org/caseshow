@@ -1,0 +1,36 @@
+{
+  "name": "jmaths",
+  "version": "0.0.1",
+  "homepage": "https://github.com/zswang/jmaths",
+  "authors": [
+    "Zswang <wjhu111@21cn.com>"
+  ],
+  "description": "Math JS Library",
+  "main": "dist/jmaths.js",
+  "moduleType": [
+    "globals"
+  ],
+  "keywords": [
+    "math",
+    "geometric",
+    "javascript"
+  ],
+  "license": "MIT",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "app/components",
+    "test",
+    "tests"
+  ],
+  "_release": "0.0.1",
+  "_resolution": {
+    "type": "version",
+    "tag": "0.0.1",
+    "commit": "0478ba807213420300605e09a9a59cde9b6e9479"
+  },
+  "_source": "git://github.com/zswang/jmaths.git",
+  "_target": "*",
+  "_originalSource": "jmaths"
+}

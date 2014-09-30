@@ -7,6 +7,10 @@
 	"private": true,
 	"dependencies": {
 		"jmaths": "*",
+<<<<<<< HEAD
 		"json-editor": "*"
+=======
+		"jframes": "*"
+>>>>>>> FETCH_HEAD
 	}
 }
