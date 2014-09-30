@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <script src="frame.js"></script>
+    </head>
+    <body>
+      <p>
+        <label for="lifetime">lifetime</label>
+        <input id="lifetime" type="range" min="100" max="3000" step="10" value="1000" />
+        <label for="layer">layer</label>
+        <input id="layer" type="range" min="1" max="30" step="1" value="20" />
+        <input id="colorize" name="colorize" type="checkbox" checked />
+        <label for="colorize">colorize</label>
+      </p>
+      <canvas width="500" height="500"></canvas>
+    </body>
+    <script>
+/**
+ * @autor techird
+ *
+ * @param  {CanvasRenderingContext2D} context
+ * @param  {number} progress range in [0, 1]
+ * @param  {object} option
+ *   option.layer {int}
+ *   option.shader {function(layer, layers, dots, dotIndex, progress)}
+ */
+function render(context, progress, option) {
+  option = option || {};
+
+  var layer = option.layer || 20;
+  var radius = option.radius || 200;
+  var shader = option.shader || function () { return 'black'; };
+  var PI = Math.PI, PI2 = PI * 2;
+
+  var dots = [];
+  var i = 0;
+
+
+  while (i < layer) dots.push( 3 * ++i );
+
+  var angles = [];
+  var lastAngle;
+
+  while (--i >= 0) {
+    if (!lastAngle) lastAngle = progress * PI2 / dots[i];
+    else {
+      lastAngle = lastAngle * dots[i + 1] / dots[i];
+    }
+    angles.unshift(lastAngle);
+  }
+
+  var dot, r, p, x, y;
+  context.save();
+  for (i = 0; i < layer; i++) {
+    dot = dots[i];
+    p = (i + 1) / layer * radius;
+    for (j = 0; j < dot; j++) {
+      r = angles[i] + j / dot * PI2;
+      x = p * Math.cos(r);
+      y = p * Math.sin(r);
+      context.beginPath();
+      context.arc(x, y, 2, 0, PI2, 0);
+      context.fillStyle = shader(i, layer, dot, j, progress);
+      context.closePath();
+      context.fill();
+    }
+  }
+  context.restore();
+}
+
+function colorizeShader(layer, layers, dots, dotIndex, progress) {
+  return 'hsl(' + (360 * layer / layers + 360 * dotIndex / dots - 360 * progress) + ', 100%, 50%)';
+}
+
+function animate() {
+  var canvas = document.querySelector('canvas');
+  var context = canvas.getContext('2d');
+
+  requestFrame(function(frame) {
+    var lifetime = document.getElementById('lifetime').value;
+    var layer = document.getElementById('layer').value;
+    var colorize = document.getElementById('colorize').checked;
+    context.clearRect(0, 0, canvas.width, canvas.height);
+    context.save();
+    context.translate(canvas.width / 2, canvas.height / 2);
+    render(context, (frame.elapsed % lifetime) / lifetime, {
+      layer: layer,
+      shader: colorize ? colorizeShader : null
+    });
+    context.restore();
+    frame.next();
+  });
+}
+
+animate();
+
+
+    </script>
+</html>
