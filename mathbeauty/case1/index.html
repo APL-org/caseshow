@@ -1,13 +1,10 @@
-<!doctype html>
-<html>
-<head>
-  <style>
-canvas {
-  border: 1px solid black;
-}
-  </style>
-  <script src="lib/jmaths/dist/jmaths.min.js"></script>
-</head>
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <script src="../../lib/jframes/frame.js"></script>
+        <script src="../../lib/jmaths/dist/jmaths.min.js"></script>
+    </head>
 <body>
   <canvas width="500" height="500"><span>Browser does not support the canvas.</span></canvas>
   <script>
@@ -108,12 +105,11 @@ void function() {
   var canvas = document.getElementsByTagName('canvas')[0];
   var context = canvas.getContext('2d');
   var lifetime = 10000;
-  var starttime = new Date;
-  //setTimeout(function() {
-  setInterval(function() {
+
+  requestFrame(function(frame) {
     context.clearRect(0, 0, canvas.width, canvas.height);
 
-    tick = (new Date - starttime) % lifetime;
+    var tick = frame.elapsed % lifetime;
     __name__.render(context, tick / lifetime, {
       center: [canvas.width / 2, canvas.height / 2], // 中心位置
       size: 7, // 点的尺寸
@@ -121,7 +117,8 @@ void function() {
       count: 20, // 点数
       induction: 4 // 感应区
     });
-  }, 1 / 60 * 1000);
+    frame.next();
+  });
 }();
   </script>
 </body>
