@@ -6,9 +6,12 @@ canvas {
   border: 1px solid black;
 }
   </style>
+  <link rel="stylesheet" type="text/css" href="http://netdna.bootstrapcdn.com/twitter-bootstrap/2.3.2/css/bootstrap-combined.min.css">
   <script src="lib/jmaths/dist/jmaths.min.js"></script>
+  <script src="lib/json-editor/dist/jsoneditor.min.js"></script>
 </head>
 <body>
+  <div id="editor_holder"></div>
   <canvas width="500" height="500"><span>Browser does not support the canvas.</span></canvas>
   <script>
 var __name__ = __name__ || {};
@@ -105,22 +108,63 @@ void function(exports) {
 }(__name__);
 
 void function() {
+  JSONEditor.defaults.options.theme = 'bootstrap2';
+  var editor_holder = document.getElementById('editor_holder');
+  var editor = new JSONEditor(editor_holder, {
+      disable_collapse: true,
+      disable_edit_json: true,
+      schema: {
+        type: 'object',
+        properties: {
+          size: {
+            default: 7,
+            format: 'range',
+            type: 'integer'
+          },
+          count: {
+            default: 20,
+            type: 'integer'
+          },
+          radius: {
+            default: 100,
+            type: 'integer'
+          },
+          center: {
+            type: 'array',
+            format: 'tabs',
+            items: {
+              type: 'integer'
+            }
+          },
+          induction: {
+            default: 4,
+            format: 'range',
+            type: 'integer'
+          }
+        }
+      }
+    }
+  );
+
   var canvas = document.getElementsByTagName('canvas')[0];
   var context = canvas.getContext('2d');
   var lifetime = 10000;
   var starttime = new Date;
+  JSONEditor.defaults.editors.object.options.collapsed = true;
+  editor.setValue({
+    center: [canvas.width / 2, canvas.height / 2], // 中心位置
+    size: 7, // 点的尺寸
+    radius: 100, // 大圆半径
+    count: 20, // 点数
+    induction: 4 // 感应区
+  });
+
   //setTimeout(function() {
   setInterval(function() {
     context.clearRect(0, 0, canvas.width, canvas.height);
 
     tick = (new Date - starttime) % lifetime;
-    __name__.render(context, tick / lifetime, {
-      center: [canvas.width / 2, canvas.height / 2], // 中心位置
-      size: 7, // 点的尺寸
-      radius: 100, // 大圆半径
-      count: 20, // 点数
-      induction: 4 // 感应区
-    });
+    __name__.render(context, tick / lifetime, editor.getValue());
   }, 1 / 60 * 1000);
 }();
   </script>
