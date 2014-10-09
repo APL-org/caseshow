@@ -7,8 +7,9 @@ canvas {
 }
   </style>
   <link rel="stylesheet" type="text/css" href="http://netdna.bootstrapcdn.com/twitter-bootstrap/2.3.2/css/bootstrap-combined.min.css">
-  <script src="lib/jmaths/dist/jmaths.min.js"></script>
-  <script src="lib/json-editor/dist/jsoneditor.min.js"></script>
+  <script src="../../lib/jframes/frame.js"></script>
+  <script src="../../lib/jmaths/dist/jmaths.min.js"></script>
+  <script src="../../lib/json-editor/dist/jsoneditor.min.js"></script>
 </head>
 <body>
   <div id="editor_holder"></div>
@@ -149,6 +150,7 @@ void function() {
   var canvas = document.getElementsByTagName('canvas')[0];
   var context = canvas.getContext('2d');
   var lifetime = 10000;
+
   var starttime = new Date;
   JSONEditor.defaults.editors.object.options.collapsed = true;
   editor.setValue({
@@ -159,13 +161,14 @@ void function() {
     induction: 4 // 感应区
   });
 
-  //setTimeout(function() {
-  setInterval(function() {
+
+  requestFrame(function(frame) {
     context.clearRect(0, 0, canvas.width, canvas.height);
 
-    tick = (new Date - starttime) % lifetime;
+    var tick = frame.elapsed % lifetime;
     __name__.render(context, tick / lifetime, editor.getValue());
-  }, 1 / 60 * 1000);
+    frame.next();
+  });
 }();
   </script>
 </body>
